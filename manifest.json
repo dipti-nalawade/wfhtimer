@@ -1,0 +1,26 @@
+{
+    "manifest_version": 2,
+  
+    "name": "Timer Plugin",
+    "description": "This extension will do timer countdown",
+    "version": "1.0",
+  
+    "browser_action": {
+     "default_icon": "icon.png",
+     "default_popup": "popup.html"
+    },
+    "permissions": [
+     "storage",
+     "notifications"
+    ],
+    "background": {
+      "scripts": [ "js/background.js" ],
+      "persistent": true
+    },
+    "options_ui": {
+      "page": "options.html",
+      "open_in_tab": false
+    }
+
+  }
+  

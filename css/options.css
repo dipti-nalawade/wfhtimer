@@ -1,0 +1,6 @@
+body {width:auto; text-align:center; } 
+#title {color:#000000;font-size: 14px; font-weight: bold;}
+.inp_time {max-width: 50px; margin-top: 5px;}
+.inp_action {width: 100px; margin-top: 5px;background:#3F9277;color: #ffffff;}
+.submit_btn_div p {font : 16px; text-align:center;}
+#msg {font-weight: bold;}

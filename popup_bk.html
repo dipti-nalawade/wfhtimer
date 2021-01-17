@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Timer</title>
+    <link rel="stylesheet" href="css/popup.css">
+    <script src = "js/jquery.min.js"></script>
+    <script type="module" src="js/popup.js"></script>
+  </head>
+  <body>
+    <div id="title1">Timer</div>
+    <div id="time_left" style="display:none;">&nbsp;</div>
+    <p>Set Alarm for</p>
+    <div id="time_input" style="display:block;">
+      <div id="timer_inp">
+        <input type="text" class="inp_time" name="t_hr" id="t_hr" size="5" maxlength="2"> Hr. : 
+        <input type="text" class="inp_time" name="t_min" id="t_min" size="5" maxlength="2"> Min.
+      </div>
+      <div style="color:red" id="err_div">&nbsp;</div>
+      <div id="set_btn_div">
+        <input type="button" name="setTimer" id="setTimer" class="inp_action" value="SET">
+      </div>
+      <div id="cancel_btn_div" style="display:none;">
+        <input type="button" name="cancelTimer" id="cancelTimer" class="inp_action" value="CANCEL">
+        <input type="button" name="pauseTimer" id="pauseTimer" class="inp_action" value="PAUSE">
+        <input type="button" name="restartTimer" id="restartTimer" class="inp_action" value="RESTART">
+      </div>
+    </div>
+  </body>
+</html>
