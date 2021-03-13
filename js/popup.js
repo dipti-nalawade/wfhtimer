@@ -26,7 +26,10 @@ document.getElementById('restartTimer').addEventListener('click', restartTimerFu
 function setWorkingHours(){
     hr = $('#t_hr').val();
     min = $('#t_min').val();
-    
+   
+    if(hr == ''){ hr = 0; }
+    if(min == ''){ min = 0; }
+
     chrome.storage.sync.set({timer_hr: hr});
     chrome.storage.sync.set({timer_min: min});
 

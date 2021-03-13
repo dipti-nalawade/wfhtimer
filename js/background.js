@@ -96,6 +96,7 @@ function cancelTimer(){
         clearTimeout(timerId);
         timerState = '';
         chrome.storage.sync.set({timer_rt: 0});
+	remainingMsTime = 0;    
     }
 }
 
@@ -164,8 +165,12 @@ function getRemainingTime(){
 
     if(remainingTimeHr < 10) { remainingTimeHr = "0" + remainingTimeHr }
     if(remainingTimeMin < 10) { remainingTimeMin = "0" + remainingTimeMin }
-    //if(remainingTimeSec < 10) { remainingTimeSec = "0" + remainingTimeSec }
+    if(remainingTimeSec < 10) { remainingTimeSec = "0" + remainingTimeSec }
 
+    if(isNaN(remainingTimeHr) || isNaN(remainingTimeMin) || isNaN(remainingTimeSec)){
+       return '';
+    }
+	
     let remainingTimeStr = remainingTimeHr+":"+remainingTimeMin+":"+remainingTimeSec;
     return remainingTimeStr;
 }
