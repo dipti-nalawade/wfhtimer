@@ -94,6 +94,7 @@ function showRemainingTime(){
         remainingTimeStr = timer.getRemainingTime();
         if(remainingTimeStr != ''){
             document.getElementById('time_left').innerHTML = "Time Left : "+remainingTimeStr;
+	    showBadge(remainingTimeStr);
         } else{
             document.getElementById('time_left').innerHTML = remainingTimeStr;
     	    timerState = timer.getTimerState();
@@ -111,10 +112,23 @@ function showRemainingTime(){
     }
 }
 
-/*chrome.notifications.onButtonClicked.addListener(function(notifId, btnIdx) {
+function showBadge(timeStr){
+    let badgeString = '';	
+    let remainingTimeArr = timeStr.split(":");
+    if(remainingTimeArr[0] > 0) { badgeString += parseInt(remainingTimeArr[0])+'H'; }
+    if(remainingTimeArr[1] > 0) { badgeString += parseInt(remainingTimeArr[1])+'M'; }
+    if(remainingTimeArr[2] > 0 && badgeString == ''){ badgeString = parseInt(remainingTimeArr[2])+'S'; }
+
+    chrome.browserAction.setBadgeBackgroundColor({ color: "#ff0000" });
+    chrome.browserAction.setBadgeText({text: badgeString });
+	
+}
+
+chrome.notifications.onButtonClicked.addListener(function(notifId, btnIdx) {
     if (notifId === myNotificationID) {
       if (btnIdx === 0) {
+         stopSound();
       }
     }
- });*/
+});
 

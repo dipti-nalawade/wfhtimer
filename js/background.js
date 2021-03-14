@@ -8,6 +8,7 @@ let remainingMsTime;
 let timerState = '';
 let audioObj; 
 let myNotificationID;
+let badgeString = '';
 
 chrome.runtime.onStartup.addListener(function() {
     var today = new Date();
@@ -166,6 +167,11 @@ function getRemainingTime(){
     remainingTimeHr   = Math.floor(remainingTimeMin / 60);
     remainingTimeMin  = Math.floor (remainingTimeMin % 60);
 
+    badgeString = '';	
+    if(remainingTimeHr > 0) { badgeString += remainingTimeHr+'H'; }
+    if(remainingTimeMin > 0) { badgeString += remainingTimeMin+'M'; }
+    if(remainingTimeSec > 0 && badgeString == '') { badgeString = remainingTimeSec+'S'; }
+
     if(remainingTimeHr < 10) { remainingTimeHr = "0" + remainingTimeHr }
     if(remainingTimeMin < 10) { remainingTimeMin = "0" + remainingTimeMin }
     if(remainingTimeSec < 10) { remainingTimeSec = "0" + remainingTimeSec }
@@ -178,11 +184,15 @@ function getRemainingTime(){
     return remainingTimeStr;
 }
 
-chrome.notifications.onButtonClicked.addListener(function(notifId, btnIdx) {
+function getBadge(){
+    return badgeString;
+}
+
+/*chrome.notifications.onButtonClicked.addListener(function(notifId, btnIdx) {
     if (notifId === myNotificationID) {
       if (btnIdx === 0) {
 	 stopSound();
       }
     }
-});
+});*/
 
