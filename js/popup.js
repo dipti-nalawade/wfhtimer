@@ -18,7 +18,6 @@ showRemainingTime();
 remainingTimeId = setInterval(showRemainingTime, 500);
 
 document.getElementById('setTimer').addEventListener('click', setWorkingHours);
-//document.getElementById('setTimer').addEventListener('click', setTimerFunc);
 document.getElementById('cancelTimer').addEventListener('click', cancelTimerFunc);
 document.getElementById('pauseTimer').addEventListener('click', pauseTimerFunc);
 document.getElementById('restartTimer').addEventListener('click', restartTimerFunc);
@@ -35,7 +34,6 @@ function setWorkingHours(){
 
     try{
         timer.setTimer(hr, min);
-        //displayTimeLeftId =  setInterval(() => updateTimeLeft(), 1000);
 
         $("#cancel_btn_div").show();
         $("#set_btn_div").hide();
@@ -48,29 +46,6 @@ function setWorkingHours(){
    
     setTimeout(() => { $("#err_div").html(''); }, 5000);
 }
-
-/*function setTimerFunc(){
-    let hr = $('#t_hr').val();
-    let min = $('#t_min').val();
-
-    try{
-        timer.setTimer(hr, min);
-        displayTimeLeftId =  setInterval(() => updateTimeLeft(), 1000);
-
-        $("#cancel_btn_div").show();
-        $("#set_btn_div").hide();
-
-        $("#err_div").html('Timer Set Successfully!');
-    } catch(err){
-        $("#err_div").html(err);
-    }
-    
-    chrome.storage.sync.set({timer_hr: hr});
-    chrome.storage.sync.set({timer_min: min});
-   
-    setTimeout(() => { $("#err_div").html(''); }, 5000);
-    remainingTimeId =  setInterval(showRemainingTime, 500);
-} */
 
 function cancelTimerFunc(){
     try{
@@ -107,9 +82,9 @@ function restartTimerFunc(){
     setTimeout(() => { $("#err_div").html(''); }, 5000);
     remainingTimeId =  setInterval(showRemainingTime, 500);
 }
+
 function showRemainingTime(){
     timerState = timer.getTimerState();
-
     if(timerState == 'set'){
         $("#cancel_btn_div").show();
         $("#time_left").show();
@@ -120,8 +95,11 @@ function showRemainingTime(){
         if(remainingTimeStr != ''){
             document.getElementById('time_left').innerHTML = "Time Left : "+remainingTimeStr;
         } else{
-            document.getElementById('Time End').innerHTML = remainingTimeStr;
-            clearTimeout(remainingTimeId);
+            document.getElementById('time_left').innerHTML = remainingTimeStr;
+    	    timerState = timer.getTimerState();
+	    if(timerState == ''){	
+              clearTimeout(remainingTimeId);
+	    }
         }
     } else if(timerState == ''){ 
         $("#submit_btn_div").show();
@@ -132,3 +110,11 @@ function showRemainingTime(){
         clearTimeout(remainingTimeId);
     }
 }
+
+/*chrome.notifications.onButtonClicked.addListener(function(notifId, btnIdx) {
+    if (notifId === myNotificationID) {
+      if (btnIdx === 0) {
+      }
+    }
+ });*/
+

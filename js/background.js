@@ -6,6 +6,8 @@ let timerMin;
 let timerSec;
 let remainingMsTime;
 let timerState = '';
+let audioObj; 
+let myNotificationID;
 
 chrome.runtime.onStartup.addListener(function() {
     var today = new Date();
@@ -16,17 +18,10 @@ chrome.runtime.onStartup.addListener(function() {
         if(result.timer_hr == '' && result.timer_min == ''){
             $("#submit_btn_div").show();
         } else{
-            //console.log(result);
             if(result.timer_dt == '' || result.timer_dt != todayDt){
                 setTimer(result.timer_hr, result.timer_min);
                 chrome.storage.sync.set({timer_dt: todayDt});
             }
-            /*else if(result.timer_dt != '' && result.timer_dt == todayDt){ 
-                if(result.timer_rt > 0){
-                    remainingMsTime = result.timer_rt;
-                    restartTimer();
-                }
-            }*/
         }
     });
 });
@@ -65,9 +60,6 @@ function setTimer(hr, min){
 function checkTimerEnd(){
     currentDate =  new Date();
     remainingMsTime = timerEndDate - currentDate;
-    //console.log(timerEndDate+"---"+currentDate+"==="+remainingMsTime);
-    //chrome.storage.sync.set({timer_rt: remainingMsTime});
-
     if(remainingMsTime <= 0){
         timerEnd();
     }
@@ -79,13 +71,27 @@ function timerEnd(){
         "type": "basic",
         "title": "Timer Alert!",
         "iconUrl": "icon.png",
-        "message": "Your Time End Now"
+        "message": "Your Time End Now",
+	"buttons": [{
+            "title": "Pause",
+        }]    
     };
 
-    chrome.notifications.create('notify', opt, function(id) {});
+    chrome.notifications.create('notify', opt, function(id) { myNotificationID = id; });
+    audioNotification();
+
     timerState = '';
     chrome.storage.sync.set({timer_dt: ''});
     chrome.storage.sync.set({timer_rt: 0});
+}
+
+function audioNotification(){
+    audioObj = new Audio('../audio/notification.mp3');
+    audioObj.play();
+}
+
+function stopSound() {
+    audioObj.pause();
 }
 
 function cancelTimer(){
@@ -112,16 +118,14 @@ function pauseTimer(){
         currentDate =  new Date();
         remainingMsTime = timerEndDate - currentDate;
         chrome.storage.sync.set({timer_rt: remainingMsTime});
-        console.log(remainingMsTime);
     }
 }
 
 function restartTimer(){
-    /*if(timerState != 'paused'){
+    if(timerState != 'paused'){
         throw new Error("Timer is not paused");
-    }else{*/
-
-    chrome.storage.sync.get(['timer_rt'], function(result) {
+    }else{
+        chrome.storage.sync.get(['timer_rt'], function(result) {
         remainingMsTime = result.timer_rt;
         console.log(remainingMsTime);
         if(remainingMsTime > 0){
@@ -130,7 +134,6 @@ function restartTimer(){
             timerSec = Math.floor(timerSec % 60);
             timerHr = Math.floor(timerMin / 60);
             timerMin = Math.floor(timerMin % 60);
-            //console.log(timerHr+"----"+timerMin+"----"+timerSec);
             timerEndDate = new Date();
             let currentHr = +timerEndDate.getHours();
             let currentMin = +timerEndDate.getMinutes();
@@ -148,8 +151,8 @@ function restartTimer(){
         } else{
             throw new Error("Working Hours are over");
         }
-    });
-    //}
+        });
+    }
 }
 
 function getTimerState(){
@@ -174,3 +177,12 @@ function getRemainingTime(){
     let remainingTimeStr = remainingTimeHr+":"+remainingTimeMin+":"+remainingTimeSec;
     return remainingTimeStr;
 }
+
+chrome.notifications.onButtonClicked.addListener(function(notifId, btnIdx) {
+    if (notifId === myNotificationID) {
+      if (btnIdx === 0) {
+	 stopSound();
+      }
+    }
+});
+
